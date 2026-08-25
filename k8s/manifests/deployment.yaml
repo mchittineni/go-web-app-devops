@@ -1,22 +1,108 @@
-# This is a sample deployment manifest file for a simple web application.
+# Deployment for the go-web-app.
+#
+# Hardening notes:
+#   - The container runs as uid 65532 with no privileges and a read-only root
+#     filesystem, which is possible because all assets are embedded in the
+#     binary (see main.go's embed.FS).
+#   - Probes hit /healthz (liveness) and /readyz (readiness). /readyz also
+#     verifies the embedded assets resolve, so a broken build never takes
+#     traffic.
+#   - Requests are set on CPU and memory; only memory has a limit. A CPU limit
+#     would throttle a bursty HTTP server for no benefit, while an unbounded
+#     memory footprint is what actually gets a node evicted.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-web-app
   labels:
-    app: go-web-app
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: go-web-app
+    app.kubernetes.io/managed-by: kubectl
 spec:
-  replicas: 1
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
-      app: go-web-app
+      app.kubernetes.io/name: go-web-app
+      app.kubernetes.io/instance: go-web-app
   template:
     metadata:
       labels:
-        app: go-web-app
+        app.kubernetes.io/name: go-web-app
+        app.kubernetes.io/instance: go-web-app
+        app.kubernetes.io/component: web
     spec:
+      serviceAccountName: go-web-app
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      # Give the process time to finish in-flight requests; main.go drains on
+      # SIGTERM with a 15s budget.
+      terminationGracePeriodSeconds: 30
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: go-web-app
       containers:
-      - name: go-web-app
-        image: <docker-user-name>/go-web-app
-        ports:
-        - containerPort: 8080
+        - name: go-web-app
+          # Pin by digest in production. This placeholder is what the Helm
+          # chart replaces; see helm/go-web-app-chart/values.yaml.
+          image: <docker-user-name>/go-web-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: LOG_LEVEL
+              value: info
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+          # Gates the rollout: the pod is not counted as available until the
+          # server answers.
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 2
+            failureThreshold: 15
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 2
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              memory: 128Mi

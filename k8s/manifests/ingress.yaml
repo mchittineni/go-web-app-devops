@@ -1,21 +1,37 @@
-# Ingress resource for the application
+# Ingress fronting the service.
+#
+# The rewrite-target annotation from the original manifest was removed: the
+# app serves real paths (/home, /courses, /static/...), so rewriting every
+# request to "/" would break asset loading.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: go-web-app
+  labels:
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Redirect plain HTTP once TLS is configured below.
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
+    # Uncomment once cert-manager is installed in the cluster.
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
+  # Terminate TLS at the ingress. Comment this block out for a local
+  # http-only cluster.
+  tls:
+    - hosts:
+        - go-web-app.local
+      secretName: go-web-app-tls
   rules:
-  - host: go-web-app.local
-    http:
-      paths: 
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: go-web-app
-            port:
-              number: 80
-
+    - host: go-web-app.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: go-web-app
+                port:
+                  name: http

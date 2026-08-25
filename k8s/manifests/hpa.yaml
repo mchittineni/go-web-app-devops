@@ -1,0 +1,34 @@
+# Horizontal autoscaling on CPU. autoscaling/v2 is required for the
+# behavior block, which stops the replica count from oscillating.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: go-web-app
+  labels:
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: go-web-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 30
+    scaleDown:
+      # Scale in slowly: a traffic dip is often temporary, and shedding
+      # replicas eagerly means paying the cold-start cost again.
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
