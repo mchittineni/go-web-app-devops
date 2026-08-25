@@ -1,72 +1,218 @@
-# DevOpsify the go web application
+# DevOps: the delivery path
 
-The main goal of this project is to implement DevOps practices in the Go web application. The project is a simple website written in Golang. It uses the `net/http` package to serve HTTP requests.
+How this application gets from a commit to a running pod, and what each gate
+is actually protecting against.
 
-DevOps practices include the following:
-
-- Creating Dockerfile (Multi-stage build)
-- Containerization
-- Continuous Integration (CI)
-- Continuous Deployment (CD)
-
-## Summary Diagram
-![image](https://github.com/user-attachments/assets/45f4ef12-c5b5-4247-9d43-356b5dfb671b)
-
-
-## Creating Dockerfile (Multi-stage build)
-
-The Dockerfile is used to build a Docker image. The Docker image contains the Go web application and its dependencies. The Docker image is then used to create a Docker container.
-
-We will use a Multi-stage build to create the Docker image. The Multi-stage build is a feature of Docker that allows you to use multiple build stages in a single Dockerfile. This will reduce the size of the final Docker image and also secure the image by removing unnecessary files and packages.
-
-## Containerization
-
-Containerization is the process of packaging an application and its dependencies into a container. The container is then run on a container platform such as Docker. Containerization allows you to run the application in a consistent environment, regardless of the underlying infrastructure.
-
-We will use Docker to containerize the Go web application. Docker is a container platform that allows you to build, ship, and run containers.
-
-Commands to build the Docker container:
-
-```bash
-docker build -t <your-docker-username>/go-web-app .
+```
+commit ──► build & test ──► lint ──► security scans ──► manifest validation
+                                                              │
+                                                              ▼
+                                        multi-arch image build ──► Trivy image scan
+                                                              │
+                                                              ▼
+                                              SBOM ──► keyless Cosign signature
+                                                              │
+                                                              ▼
+                                  commit digest into values.yaml ──► Argo CD syncs
 ```
 
-Command to run the Docker container:
+CI never holds cluster credentials. Its last action is a commit; Argo CD does
+the deploying.
+
+## Toolchain versions
+
+| Component | Version | Where it is pinned |
+|---|---|---|
+| Go (language) | 1.26 | [go.mod](go.mod) |
+| Go (build toolchain) | 1.27 | [Dockerfile](Dockerfile), `GO_VERSION` in the workflow |
+| Runtime base image | `distroless/static-debian12:nonroot` | [Dockerfile](Dockerfile) |
+| golangci-lint | v2.13.1 | [.golangci.yml](.golangci.yml), workflow |
+| Helm | v4.2.4 | workflow |
+| Kubernetes | ≥ 1.27 | `kubeVersion` in [Chart.yaml](helm/go-web-app-chart/Chart.yaml) |
+| ingress-nginx | controller-v1.15.1 | [installation doc](ingress-controller/nginx/01-installation.md) |
+| Argo CD | v3.5.1 | [install doc](gitops/argocd/01-install.md) |
+
+Dependabot ([config](.github/dependabot.yml)) opens weekly PRs for Go modules,
+GitHub Actions and base images.
+
+## The container
+
+Two stages. The build stage compiles a static binary; the runtime stage is
+`distroless/static` with nothing in it but that binary.
 
 ```bash
-docker run -p 8080:8080 <your-docker-username>/go-web-app
+make docker
+make docker-run    # runs it read-only, no capabilities, no privilege escalation
 ```
 
-Command to push the Docker container to Docker Hub:
+Properties worth keeping:
+
+- `CGO_ENABLED=0` — a truly static binary, so the runtime image needs no libc.
+- `-trimpath` and `-buildvcs=false` — no build-host paths leak into the binary,
+  which is what makes the build reproducible.
+- `distroless/static:nonroot` — no shell, no package manager, no busybox. There
+  is nothing in the image for an RCE to pivot into.
+- Runs as uid **65532**, declared numerically so `runAsNonRoot` admission can
+  verify it without resolving `/etc/passwd`.
+- Assets are embedded, so no `COPY` of static files and no writable path is
+  needed at runtime.
+- Built for `linux/amd64` and `linux/arm64`.
+
+## The pipeline
+
+[`.github/workflows/cicd.yaml`](.github/workflows/cicd.yaml). Permissions are
+`contents: read` at the top level; each job opts into more only where it needs
+it.
+
+| Job | What it enforces |
+|---|---|
+| **build** | `gofmt` clean, `go.mod` tidy, `go vet`, tests under `-race` with `-shuffle=on`, coverage |
+| **lint** | golangci-lint, including `gosec`, `bodyclose`, `errorlint`, `noctx` |
+| **security** | `govulncheck` (reachable stdlib + module CVEs), Trivy filesystem scan, gitleaks secret scan; findings uploaded as SARIF to code scanning |
+| **manifests** | `helm lint --strict`, chart renders, `kubeconform` against real Kubernetes schemas, Trivy config scan of the Dockerfile and manifests |
+| **image** | Multi-arch build, Trivy image scan, CycloneDX SBOM, keyless Cosign signature and SBOM attestation |
+| **deploy** | Commits the new tag **and digest** into the chart's values |
+
+Notes on why a few things are the way they are:
+
+- **PRs build but never push.** They build a single architecture and `--load`
+  it so the image scan has a real artefact to inspect. buildx cannot `--load`
+  a multi-platform result, which is why the platform list is conditional.
+- **Trivy runs twice on the filesystem.** `trivy-action` ignores `exit-code`
+  when it is emitting SARIF, so reporting and gating cannot be one step.
+- **Deploys are pinned by digest.** Tags are mutable; a digest is not. The tag
+  is written alongside it only so a human can read the values file.
+- **`[skip ci]` on the promotion commit**, plus `paths-ignore` on
+  `values.yaml`, so the pipeline cannot trigger itself.
+
+### Required repository secrets
+
+| Secret | Purpose |
+|---|---|
+| `DOCKERHUB_USERNAME` | Registry namespace and login |
+| `DOCKERHUB_TOKEN` | Registry access token — **not** an account password |
+| `TOKEN` | Optional PAT for the promotion commit. Falls back to `GITHUB_TOKEN`; needed only if branch protection blocks the default token |
+
+Keyless signing needs no secret — it uses the workflow's OIDC identity, which
+is why the `image` job requests `id-token: write`.
+
+### Verifying a published image
 
 ```bash
-docker push <your-docker-username>/go-web-app
+cosign verify docker.io/<user>/go-web-app:<tag> \
+  --certificate-identity-regexp='.*/go-web-app-devops/.*' \
+  --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+
+# And read the attested SBOM
+cosign download attestation docker.io/<user>/go-web-app:<tag> \
+  | jq -r '.payload' | base64 -d | jq '.predicate'
 ```
 
-## Continuous Integration (CI)
+## Kubernetes
 
-Continuous Integration (CI) is the practice of automating the integration of code changes into a shared repository. CI helps to catch bugs early in the development process and ensures that the code is always in a deployable state.
+Two equivalent paths. The Helm chart is what CI promotes to;
+`k8s/manifests/` is the same thing written out longhand for learning.
 
-We will use GitHub Actions to implement CI for the Go web application. GitHub Actions is a feature of GitHub that allows you to automate workflows, such as building, testing, and deploying code.
+```bash
+# Helm (what production uses)
+make helm-install
+make helm-test          # runs a real HTTP probe against the service
 
-The GitHub Actions workflow will run the following steps:
+# Raw manifests
+make k8s-apply
+```
 
-- Checkout the code from the repository
-- Build the Docker image
-- Run the Docker container
-- Run tests
+### What the workload asserts about itself
 
-## Continuous Deployment (CD)
+| Control | Setting | Why |
+|---|---|---|
+| Probes | `startupProbe`, `livenessProbe` on `/healthz`; `readinessProbe` on `/readyz` | `/readyz` verifies the embedded assets resolve, so a broken build never takes traffic |
+| Rollout | `maxUnavailable: 0`, `maxSurge: 1` | New pods must be ready before old ones go |
+| Drain | `terminationGracePeriodSeconds: 30` | The app drains for up to 15s on `SIGTERM` |
+| Root filesystem | `readOnlyRootFilesystem: true` | Nothing is written at runtime |
+| Privileges | `allowPrivilegeEscalation: false`, `capabilities.drop: [ALL]` | Restricted PSS baseline |
+| Identity | `runAsNonRoot`, uid/gid 65532, `seccompProfile: RuntimeDefault` | Restricted PSS baseline |
+| API access | `automountServiceAccountToken: false` | The app never calls the API server, so it gets no token |
+| Resources | CPU + memory requests, memory limit only | A CPU limit throttles a bursty HTTP server for no benefit; unbounded memory is what evicts a node |
+| Availability | PDB `minAvailable`, `topologySpreadConstraints` | Survives a node drain and a single-node loss |
+| Network | Optional NetworkPolicy: ingress from the controller, egress to DNS only | Default-deny for a workload that needs nothing outbound |
 
-Continuous Deployment (CD) is the practice of automatically deploying code changes to a production environment. CD helps to reduce the time between code changes and deployment, allowing you to deliver new features and fixes to users faster.
+The Ingress no longer carries `rewrite-target: /`. The original manifest had
+it, but the app serves real paths (`/courses`, `/static/app.css`), so rewriting
+everything to `/` breaks asset loading.
 
-We will use Argo CD to implement CD for the Go web application. Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. It allows you to deploy applications to Kubernetes clusters using Git as the source of truth.
+### Enabling the optional pieces
 
-The Argo CD application will deploy the Go web application to a Kubernetes cluster. The application will be automatically synced with the Git repository, ensuring that the application is always up to date.
+```bash
+helm upgrade --install go-web-app ./helm/go-web-app-chart \
+  --set ingress.enabled=true \
+  --set autoscaling.enabled=true \
+  --set networkPolicy.enabled=true \
+  --atomic --timeout 5m
+```
 
-## Conclusion
+`--atomic` rolls back automatically if the release does not become healthy,
+which is what you want in a pipeline.
 
+## GitOps with Argo CD
 
+Install per [gitops/argocd/01-install.md](gitops/argocd/01-install.md), then
+apply [gitops/argocd/02-application.yaml](gitops/argocd/02-application.yaml).
 
+`selfHeal: true` reverts manual `kubectl edit`s, and the Application ignores
+`/spec/replicas` because the HPA owns that field once autoscaling is on —
+otherwise Argo CD and the HPA fight over it forever.
 
+## Cluster setup
 
+- [eks/01-prereq.md](eks/01-prereq.md) — tooling and credentials
+- [eks/02-install-eks-fargate.md](eks/02-install-eks-fargate.md) — cluster creation
+- [ingress-controller/nginx/01-installation.md](ingress-controller/nginx/01-installation.md) — ingress
+
+**Delete the cluster when you are done.** EKS bills the control plane hourly
+whether or not anything is deployed.
+
+## Rollback
+
+```bash
+# Helm
+helm rollback go-web-app          # previous revision
+helm history go-web-app
+
+# Argo CD — revert the promotion commit; the cluster follows Git
+git revert <promotion-commit>
+
+# Emergency, out-of-band
+kubectl rollout undo deployment/go-web-app
+```
+
+Prefer the Git revert. A `kubectl rollout undo` under Argo CD's `selfHeal` will
+be reverted back within minutes, because Git still says otherwise.
+
+## The documentation site
+
+A beginner-facing guide lives in [`docs/`](docs/) and publishes to GitHub Pages
+at <https://mchittineni.github.io/go-web-app-devops/>.
+
+```bash
+make docs-install   # once
+make docs           # live preview on :8000
+make docs-build     # exactly what CI runs (--strict)
+```
+
+[`.github/workflows/docs.yaml`](.github/workflows/docs.yaml) builds it on every
+push touching `docs/` or `mkdocs.yml` and deploys from `main`. It uses the Pages
+Actions flow, so there is no `gh-pages` branch and no build output in the
+repository. `--strict` means a broken internal link or a page missing from the
+nav fails the build rather than shipping.
+
+**One-time setup in GitHub:** Settings -> Pages -> Source -> **GitHub Actions**.
+Without that, the deploy job fails with a "Pages not enabled" error.
+
+## Reproducing the gates locally
+
+```bash
+make verify   # fmt, vet, lint, test, helm lint + schema validation
+make vuln     # govulncheck
+make scan     # Trivy filesystem + image
+```
