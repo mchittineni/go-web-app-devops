@@ -1,0 +1,39 @@
+# `helm test` target: proves the service actually answers before a release is
+# declared good.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "go-web-app-chart.fullname" . }}-test-connection"
+  labels:
+    {{- include "go-web-app-chart.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65532
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: probe
+      image: curlimages/curl:8.11.1
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
+      args:
+        - --fail
+        - --silent
+        - --show-error
+        - --max-time
+        - "10"
+        - "http://{{ include "go-web-app-chart.fullname" . }}:{{ .Values.service.port }}/readyz"
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          memory: 32Mi

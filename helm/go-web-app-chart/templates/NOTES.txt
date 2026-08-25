@@ -1,0 +1,33 @@
+{{ .Chart.Name }} {{ .Chart.AppVersion }} deployed as release "{{ .Release.Name }}".
+
+Image:
+  {{ include "go-web-app-chart.image" . }}
+{{- if not .Values.image.digest }}
+
+  NOTE: this release is pinned by tag, not by digest. Set image.digest to make
+  the rollout reproducible. CI writes both on every successful build.
+{{- end }}
+
+Reach the app:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else }}
+  kubectl --namespace {{ .Release.Namespace }} port-forward \
+    svc/{{ include "go-web-app-chart.fullname" . }} 8080:{{ .Values.service.port }}
+
+  Then open http://localhost:8080/home
+{{- end }}
+
+Check the rollout:
+  kubectl --namespace {{ .Release.Namespace }} rollout status \
+    deployment/{{ include "go-web-app-chart.fullname" . }}
+
+Endpoints served by the app:
+  /home /courses /about /contact   pages
+  /healthz                         liveness
+  /readyz                          readiness (verifies embedded assets)
+  /version                         build metadata
