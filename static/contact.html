@@ -1,68 +1,161 @@
-<Doctype html>
-<html>
-    <head>
-        <title>Contact</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact · Learn DevOps from Basics</title>
+  <meta name="description" content="Join the members-only Slack channel, comment on YouTube, or open a GitHub issue for anything about this project.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f8fc" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="/contact">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306b6d4'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='bold' text-anchor='middle' fill='%23041219'%3E%26lt;/%26gt;%3C/text%3E%3C/svg%3E">
 
-            header {
-                background-color: #333;
-                color: #fff;
-                padding: 10px 0;
-                text-align: center;
-            }
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contact · Learn DevOps from Basics">
+  <meta property="og:description" content="Join the members-only Slack channel, comment on YouTube, or open a GitHub issue for anything about this project.">
+  <meta property="og:image" content="/static/images/golang-website.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
+  <link rel="preload" href="/static/app.css" as="style">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-            nav ul li {
-                display: inline;
-                margin-right: 10px;
-            }
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-veil" aria-hidden="true"></div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+  <div class="scroll-progress" aria-hidden="true"></div>
 
-            nav ul li a {
-                color: #fff;
-                text-decoration: none;
-            }
+  <header class="site-header">
+    <div class="shell nav-bar">
+      <a class="brand" href="/home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>go<em>&#183;</em>web<em>&#183;</em>app</span>
+      </a>
 
-            main {
-                padding: 20px;
-            }
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="primary-nav">
+          <li><a class="nav-link" href="/home">Home</a></li>
+          <li><a class="nav-link" href="/courses">Courses</a></li>
+          <li><a class="nav-link" href="/about">About</a></li>
+          <li><a class="nav-link" href="/contact" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
 
-            section {
-                margin-bottom: 20px;
-            }
+      <div class="nav-actions">
+        <button class="palette-btn" type="button" data-palette-open hidden>
+          <span>Jump to&#8230;</span> <kbd>&#8984;K</kbd>
+        </button>
+        <button class="icon-btn" type="button" data-theme-toggle hidden
+                aria-label="Switch colour theme">&#9683;</button>
+        <button class="icon-btn nav-toggle" type="button" data-nav-toggle hidden
+                aria-expanded="false" aria-controls="primary-nav"
+                aria-label="Toggle navigation">&#8801;</button>
+      </div>
+    </div>
+  </header>
 
-            footer {
-                background-color: #333;
-                color: #fff;
-                text-align: center;
-                padding: 10px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="courses">Courses</a></li>
-                </ul>
-            </nav>
-        </header>
+  <main id="main" class="shell">
+    <section class="hero">
+      <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>Community</p>
+      <h1>Got a question?<br><span class="gradient-text">Ask in the open.</span></h1>
+      <p class="lede">
+        For any doubts while learning, join the members-only Slack channel. It is
+        the fastest way to get unstuck, and your question usually helps someone
+        else who hit the same wall.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://www.youtube.com/abhishekVeeramalla/join"
+           rel="noopener noreferrer" target="_blank">
+          Join the Slack channel <span class="arrow" aria-hidden="true">&#8599;</span>
+        </a>
+        <a class="btn btn-ghost" href="/courses">Back to courses</a>
+      </div>
+    </section>
 
-        <main>
-            <section>
-                <h1>Contact Us</h1>
-                <p>For any doubts while learning, Join our Members only exclusive slack channel</p>
-                <a href="https://www.youtube.com/abhishekVeeramalla/join">Join Slack</a>
+    <section aria-labelledby="channels">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="channels">Where to reach out</span>
+        <h2>Pick the channel that fits</h2>
+      </div>
+      <div class="grid">
+        <a class="card" data-reveal href="https://www.youtube.com/abhishekVeeramalla/join"
+           rel="noopener noreferrer" target="_blank">
+          <div class="card-icon" aria-hidden="true">&#128172;</div>
+          <h3>Members Slack <span class="arrow" aria-hidden="true">&#8599;</span></h3>
+          <p>Exclusive channel for members. Best for questions while working
+             through a playlist.</p>
+        </a>
+        <a class="card" data-reveal href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa"
+           rel="noopener noreferrer" target="_blank">
+          <div class="card-icon" aria-hidden="true">&#9654;</div>
+          <h3>YouTube <span class="arrow" aria-hidden="true">&#8599;</span></h3>
+          <p>Comment on the video you are watching &#8212; useful when the question
+             is about a specific step.</p>
+        </a>
+        <a class="card" data-reveal href="https://github.com/iam-veeramalla/go-web-app-devops"
+           rel="noopener noreferrer" target="_blank">
+          <div class="card-icon" aria-hidden="true">&#128193;</div>
+          <h3>GitHub issues <span class="arrow" aria-hidden="true">&#8599;</span></h3>
+          <p>For bugs in this project or the manifests, open an issue on the
+             repository.</p>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="callout" data-reveal>
+        <div>
+          <h2>Before you ask</h2>
+          <p class="flow-tight">
+            Include what you ran, what you expected and what actually happened
+            &#8212; plus the output of <code>kubectl describe</code> or
+            <code>kubectl logs</code> if it is a cluster problem. It turns a
+            day-long thread into a five-minute answer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>&copy; Abhishek Veeramalla &#183; content free to use</p>
+      <p><code>go-web-app</code> &#183; Go 1.26 &#183; Kubernetes-native</p>
+      <nav aria-label="Footer">
+        <a href="/home">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/healthz">Health</a>
+        <a href="/version">Version</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="palette" id="palette" aria-label="Jump to a page">
+    <input class="palette-input" type="text" placeholder="Jump to a page&#8230;"
+           aria-label="Filter pages" autocomplete="off" spellcheck="false">
+    <ul class="palette-list">
+          <li>
+            <a href="/home"><span>Home</span><span class="hint">Overview and the learning path</span></a>
+          </li>
+          <li>
+            <a href="/courses"><span>Courses</span><span class="hint">Every Zero-to-Hero playlist</span></a>
+          </li>
+          <li>
+            <a href="/about"><span>About</span><span class="hint">Who maintains this</span></a>
+          </li>
+          <li>
+            <a href="/contact"><span>Contact</span><span class="hint">Join the community</span></a>
+          </li>
+    </ul>
+    <p class="palette-empty" hidden>No matches.</p>
+    <div class="palette-foot">
+      <span>&#8593;&#8595; navigate</span><span>&#8629; open</span><span>esc close</span>
+    </div>
+  </dialog>
+</body>
+</html>
