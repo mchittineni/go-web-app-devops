@@ -1,0 +1,36 @@
+# Default-deny for this workload, then allow exactly what it needs:
+# inbound HTTP from the ingress controller, and outbound DNS. The app makes
+# no other egress calls — everything it serves is compiled into the binary.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: go-web-app
+  labels:
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: go-web-app
+      app.kubernetes.io/instance: go-web-app
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

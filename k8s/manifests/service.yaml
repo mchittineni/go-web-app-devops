@@ -1,15 +1,20 @@
-# Service for the application
+# ClusterIP service fronting the deployment. The named target port lets the
+# container port move without touching this manifest.
 apiVersion: v1
 kind: Service
 metadata:
   name: go-web-app
   labels:
-    app: go-web-app
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app
+    app.kubernetes.io/component: web
 spec:
-  ports:
-  - port: 80
-    targetPort: 8080
-    protocol: TCP
-  selector:
-    app: go-web-app
   type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app

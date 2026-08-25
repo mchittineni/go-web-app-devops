@@ -1,0 +1,15 @@
+# Keeps at least two replicas serving during voluntary disruptions such as a
+# node drain or a cluster upgrade.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: go-web-app
+  labels:
+    app.kubernetes.io/name: go-web-app
+    app.kubernetes.io/instance: go-web-app
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: go-web-app
+      app.kubernetes.io/instance: go-web-app
