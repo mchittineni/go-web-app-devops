@@ -1,92 +1,217 @@
-<DocType html>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Courses · Learn DevOps from Basics</title>
+  <meta name="description" content="Nine free Zero-to-Hero playlists covering DevOps, AWS, Azure, Terraform, Python, Ansible, GitOps, networking and Kubernetes troubleshooting.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f8fc" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="/courses">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306b6d4'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='bold' text-anchor='middle' fill='%23041219'%3E%26lt;/%26gt;%3C/text%3E%3C/svg%3E">
 
-<html>
-    <head>
-        <title>Learn DevOps from Basics</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Courses · Learn DevOps from Basics">
+  <meta property="og:description" content="Nine free Zero-to-Hero playlists covering DevOps, AWS, Azure, Terraform, Python, Ansible, GitOps, networking and Kubernetes troubleshooting.">
+  <meta property="og:image" content="/static/images/golang-website.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-            header {
-                background-color: #333;
-                color: #fff;
-                padding: 10px 0;
-                text-align: center;
-            }
+  <link rel="preload" href="/static/app.css" as="style">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-veil" aria-hidden="true"></div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+  <div class="scroll-progress" aria-hidden="true"></div>
 
-            nav ul li {
-                display: inline;
-                margin-right: 10px;
-            }
+  <header class="site-header">
+    <div class="shell nav-bar">
+      <a class="brand" href="/home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>go<em>&#183;</em>web<em>&#183;</em>app</span>
+      </a>
 
-            nav ul li a {
-                color: #fff;
-                text-decoration: none;
-            }
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="primary-nav">
+          <li><a class="nav-link" href="/home">Home</a></li>
+          <li><a class="nav-link" href="/courses" aria-current="page">Courses</a></li>
+          <li><a class="nav-link" href="/about">About</a></li>
+          <li><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+      </nav>
 
-            main {
-                padding: 20px;
-            }
+      <div class="nav-actions">
+        <button class="palette-btn" type="button" data-palette-open hidden>
+          <span>Jump to&#8230;</span> <kbd>&#8984;K</kbd>
+        </button>
+        <button class="icon-btn" type="button" data-theme-toggle hidden
+                aria-label="Switch colour theme">&#9683;</button>
+        <button class="icon-btn nav-toggle" type="button" data-nav-toggle hidden
+                aria-expanded="false" aria-controls="primary-nav"
+                aria-label="Toggle navigation">&#8801;</button>
+      </div>
+    </div>
+  </header>
 
-            section {
-                margin-bottom: 20px;
-            }
+  <main id="main" class="shell">
+    <section class="hero">
+      <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>9 playlists &#183; always free</p>
+      <h1>Learn DevOps<br><span class="gradient-text">from the basics.</span></h1>
+      <p class="lede">
+        DevOps combines software development and IT operations to shorten the
+        development life cycle and deliver continuously without giving up quality.
+        Start with the core path, then branch into the cloud or tool you need next.
+      </p>
+    </section>
 
-            footer {
-                background-color: #333;
-                color: #fff;
-                text-align: center;
-                padding: 10px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="courses">Courses</a></li>
-                </ul>
-            </nav>
-        </header>
+    <section aria-labelledby="main-tutorials">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="main-tutorials">Main tutorials</span>
+        <h2>The core learning path</h2>
+      </div>
+      <ul class="link-list" data-reveal>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">01</span>
+              <span class="title">DevOps Zero to Hero</span>
+              <span class="meta">core path</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvLNOxX0RfndiYSt1Le9azze" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">02</span>
+              <span class="title">AWS Zero to Hero</span>
+              <span class="meta">cloud</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIcxgCUyBHVOcWs0Krjx9xR" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">03</span>
+              <span class="title">Azure Zero to Hero</span>
+              <span class="meta">cloud</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvI0O4PeKVV1-yJoX2AqIWuf" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">04</span>
+              <span class="title">Terraform Zero to Hero</span>
+              <span class="meta">infra as code</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvKwTyYNJCUwGPvql0TrsPgv" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">05</span>
+              <span class="title">Python Zero to Hero</span>
+              <span class="meta">automation</span>
+            </a>
+          </li>
+      </ul>
+    </section>
 
-        <main>
-            <section>
-                <h1>Learn DevOps from Basics</h1>
-                <p>DevOps is a set of practices that combines software development (Dev) and IT operations (Ops)</p>
-                <p>It aims to shorten the systems development life cycle and provide continuous delivery with high software quality. DevOps is complementary with Agile software development; several DevOps aspects came from Agile methodology</p>    
+    <section aria-labelledby="additional">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="additional">Additional tutorials</span>
+        <h2>Go deeper on the fundamentals</h2>
+      </div>
+      <ul class="link-list" data-reveal>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvKv4MFW35XRskZbQbrt6ep-" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">01</span>
+              <span class="title">Networking Fundamentals</span>
+              <span class="meta">foundations</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvLxd5nmtmORCmhD5jkrNbuE" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">02</span>
+              <span class="title">Ansible Zero to Hero</span>
+              <span class="meta">config mgmt</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvKu7OZpgj1-MzJFqZ8RBp6f" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">03</span>
+              <span class="title">GitOps Zero to Hero</span>
+              <span class="meta">delivery</span>
+            </a>
+          </li>
+      </ul>
+    </section>
 
-                <h2>Main Tutorials</h2>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa">DevOps Zero to Hero</a></p>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvLNOxX0RfndiYSt1Le9azze">AWS Zero to Hero</a></p>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIcxgCUyBHVOcWs0Krjx9xR">Azure Zero to Hero</a></p>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvI0O4PeKVV1-yJoX2AqIWuf">Terraform Zero to Hero</a></p>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvKwTyYNJCUwGPvql0TrsPgv">Python Zero to Hero</a></p>
+    <section aria-labelledby="troubleshooting">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="troubleshooting">Troubleshooting</span>
+        <h2>When production disagrees with you</h2>
+      </div>
+      <ul class="link-list" data-reveal>
+          <li>
+            <a class="link-row" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIrFBI1farpLS_OSUBXJMLX" rel="noopener noreferrer" target="_blank">
+              <span class="idx" aria-hidden="true">01</span>
+              <span class="title">Troubleshooting Kubernetes</span>
+              <span class="meta">day 2 ops</span>
+            </a>
+          </li>
+      </ul>
+    </section>
 
-                <h2>Additional Tutorials</h2>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvKv4MFW35XRskZbQbrt6ep-">Networking Fundamentals</a></p>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvLxd5nmtmORCmhD5jkrNbuE">Ansible Zero to Hero</a></p>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvKu7OZpgj1-MzJFqZ8RBp6f">GitOps Zero to Hero</a></p>
+    <section>
+      <div class="callout" data-reveal>
+        <div>
+          <h2>Stuck on something?</h2>
+          <p class="lede flow-tight">
+            Join the members-only Slack channel and ask. Questions from learners
+            shape what gets recorded next.
+          </p>
+        </div>
+        <div class="actions flush">
+          <a class="btn btn-primary" href="/contact">
+            Get in touch <span class="arrow" aria-hidden="true">&#8594;</span>
+          </a>
+        </div>
+      </div>
+    </section>
 
-                <h2>Troubleshooting Tutorials</h2>
-                <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIrFBI1farpLS_OSUBXJMLX">Troubleshooting Kubernetes</a></p>
-            </section>
-        </main>
+  </main>
 
-        <footer>
-            <p>&copy; Abhishek.Veeramalla</p>
-        </footer>
-    </body>
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>&copy; Abhishek Veeramalla &#183; content free to use</p>
+      <p><code>go-web-app</code> &#183; Go 1.26 &#183; Kubernetes-native</p>
+      <nav aria-label="Footer">
+        <a href="/home">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/healthz">Health</a>
+        <a href="/version">Version</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="palette" id="palette" aria-label="Jump to a page">
+    <input class="palette-input" type="text" placeholder="Jump to a page&#8230;"
+           aria-label="Filter pages" autocomplete="off" spellcheck="false">
+    <ul class="palette-list">
+          <li>
+            <a href="/home"><span>Home</span><span class="hint">Overview and the learning path</span></a>
+          </li>
+          <li>
+            <a href="/courses"><span>Courses</span><span class="hint">Every Zero-to-Hero playlist</span></a>
+          </li>
+          <li>
+            <a href="/about"><span>About</span><span class="hint">Who maintains this</span></a>
+          </li>
+          <li>
+            <a href="/contact"><span>Contact</span><span class="hint">Join the community</span></a>
+          </li>
+    </ul>
+    <p class="palette-empty" hidden>No matches.</p>
+    <div class="palette-foot">
+      <span>&#8593;&#8595; navigate</span><span>&#8629; open</span><span>esc close</span>
+    </div>
+  </dialog>
+</body>
 </html>

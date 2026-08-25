@@ -1,90 +1,163 @@
-<Docktype html>
-<html>
-    <head>
-        <title>About</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About · Learn DevOps from Basics</title>
+  <meta name="description" content="Abhishek Veeramalla — GitOps product lead at Red Hat, maintainer of the Argo CD Operator and creator of Argo Rollouts Manager.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f8fc" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="/about">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306b6d4'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='bold' text-anchor='middle' fill='%23041219'%3E%26lt;/%26gt;%3C/text%3E%3C/svg%3E">
 
-            header {
-                background-color: #333;
-                color: #fff;
-                padding: 10px 0;
-                text-align: center;
-            }
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About · Learn DevOps from Basics">
+  <meta property="og:description" content="Abhishek Veeramalla — GitOps product lead at Red Hat, maintainer of the Argo CD Operator and creator of Argo Rollouts Manager.">
+  <meta property="og:image" content="/static/images/golang-website.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
+  <link rel="preload" href="/static/app.css" as="style">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-            nav ul li {
-                display: inline;
-                margin-right: 10px;
-            }
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-veil" aria-hidden="true"></div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+  <div class="scroll-progress" aria-hidden="true"></div>
 
-            nav ul li a {
-                color: #fff;
-                text-decoration: none;
-            }
+  <header class="site-header">
+    <div class="shell nav-bar">
+      <a class="brand" href="/home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>go<em>&#183;</em>web<em>&#183;</em>app</span>
+      </a>
 
-            main {
-                padding: 20px;
-            }
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="primary-nav">
+          <li><a class="nav-link" href="/home">Home</a></li>
+          <li><a class="nav-link" href="/courses">Courses</a></li>
+          <li><a class="nav-link" href="/about" aria-current="page">About</a></li>
+          <li><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+      </nav>
 
-            section {
-                margin-bottom: 20px;
-            }
+      <div class="nav-actions">
+        <button class="palette-btn" type="button" data-palette-open hidden>
+          <span>Jump to&#8230;</span> <kbd>&#8984;K</kbd>
+        </button>
+        <button class="icon-btn" type="button" data-theme-toggle hidden
+                aria-label="Switch colour theme">&#9683;</button>
+        <button class="icon-btn nav-toggle" type="button" data-nav-toggle hidden
+                aria-expanded="false" aria-controls="primary-nav"
+                aria-label="Toggle navigation">&#8801;</button>
+      </div>
+    </div>
+  </header>
 
-            footer {
-                background-color: #333;
-                color: #fff;
-                text-align: center;
-                padding: 10px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="courses">Courses</a></li>
-                </ul>
-            </nav>
-        </header>
+  <main id="main" class="shell">
+    <section class="hero">
+      <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>About the author</p>
+      <h1>Hi, I&#8217;m Abhishek.<br><span class="gradient-text">Welcome to the channel.</span></h1>
+      <p class="lede">
+        I&#8217;m an open source enthusiast and a firm believer in sharing knowledge.
+        I have footprints in projects including Argo CD, the Argo CD Operator,
+        Argo Rollouts Manager, the GitOps Operator, the F5 Ingress Controller and
+        the NGINX Ingress Controller.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa"
+           rel="noopener noreferrer" target="_blank">
+          Watch the playlists <span class="arrow" aria-hidden="true">&#8599;</span>
+        </a>
+        <a class="btn btn-ghost" href="/contact">Say hello</a>
+      </div>
+    </section>
 
-        <main>
-            <section>
-                <h1>About the Author</h1>
-                <p>Hi Everyone, My name is Abhishek and welcome to my channel :)</p>
+    <section aria-labelledby="roles">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="roles">Open source</span>
+        <h2>Where I spend my time</h2>
+      </div>
+      <p class="lede flow-loose" data-reveal>
+        Alongside working at Red Hat as a GitOps product lead, I hold these
+        positions in open source communities.
+      </p>
+      <ul class="timeline" data-reveal>
+        <li><strong>Maintainer &#8212; Argo CD Operator</strong><span>Operator lifecycle for Argo CD on Kubernetes and OpenShift.</span></li>
+        <li><strong>Creator &#8212; Argo Rollouts Manager</strong><span>Progressive delivery, declared and reconciled.</span></li>
+        <li><strong>Maintainer &#8212; Red Hat Developer GitOps Operator</strong><span>The supported GitOps story on OpenShift.</span></li>
+        <li><strong>Member &#8212; Argo Project</strong><span>Contributing across the Argo ecosystem.</span></li>
+        <li><strong>Member &#8212; Argo SIG Security</strong><span>Hardening the projects everyone deploys.</span></li>
+      </ul>
+    </section>
 
-                    <p>    I am an opensource enthusiast and a great believer in sharing knowledge. </p>
-                        <p>  I have my footprints in popular opensource projects like Argo CD, Argo CD Operator, Argo Rollouts Manager, GitOps Operator, F5 Ingress Controller, Nginx Ingress Controller by Nginx and others. </p>
-                    
-                            <p> Apart from working with Red Hat as a GitOps product lead, I also hold below positions in OpenSource communities</p>
-                                <p>  - Maintainer of Argo CD Operator</p>
-                                    <p> - Creator of Argo Rollouts Manager</p>
-                                        <p> - Maintainer of RedHat Developer (GitOps operator)</p>
-                                            <p> - Member of Argo Project</p>
-                                                <p> - Member of Argo SIG Security</p>
-                    
-                                                    <p> If you want to learn complete devops for free with practical projects, checkout the playlist</p>
-                                                        <p><a href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa"> Playlists</a></p>
-                    
-                                                            <p> Please subscribe to the channel to keep learning and growing together. Thanks :)</p>
-            </section>
-        </main>
+    <section aria-labelledby="why">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="why">Why this project exists</span>
+        <h2>The website is the syllabus</h2>
+      </div>
+      <div class="grid">
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#127891;</div>
+          <h3>Free, forever</h3>
+          <p>Complete DevOps training with practical projects, at no cost. The
+             playlists stay open and keep getting extended.</p>
+        </article>
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#128295;</div>
+          <h3>Built in the open</h3>
+          <p>This app, its Dockerfile, its CI pipeline and its Helm chart are all
+             in the repository. Read them, break them, improve them.</p>
+        </article>
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#128101;</div>
+          <h3>Learn together</h3>
+          <p>Subscribe to keep learning and growing together, and bring your
+             questions to the community channel.</p>
+        </article>
+      </div>
+    </section>
 
-        <footer>
-            <p>&copy; Abhishek.Veeramalla</p>
-        </footer>
-    </body>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>&copy; Abhishek Veeramalla &#183; content free to use</p>
+      <p><code>go-web-app</code> &#183; Go 1.26 &#183; Kubernetes-native</p>
+      <nav aria-label="Footer">
+        <a href="/home">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/healthz">Health</a>
+        <a href="/version">Version</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="palette" id="palette" aria-label="Jump to a page">
+    <input class="palette-input" type="text" placeholder="Jump to a page&#8230;"
+           aria-label="Filter pages" autocomplete="off" spellcheck="false">
+    <ul class="palette-list">
+          <li>
+            <a href="/home"><span>Home</span><span class="hint">Overview and the learning path</span></a>
+          </li>
+          <li>
+            <a href="/courses"><span>Courses</span><span class="hint">Every Zero-to-Hero playlist</span></a>
+          </li>
+          <li>
+            <a href="/about"><span>About</span><span class="hint">Who maintains this</span></a>
+          </li>
+          <li>
+            <a href="/contact"><span>Contact</span><span class="hint">Join the community</span></a>
+          </li>
+    </ul>
+    <p class="palette-empty" hidden>No matches.</p>
+    <div class="palette-foot">
+      <span>&#8593;&#8595; navigate</span><span>&#8629; open</span><span>esc close</span>
+    </div>
+  </dialog>
+</body>
 </html>

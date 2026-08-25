@@ -1,91 +1,230 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learn DevOps from Basics</title>
+  <meta name="description" content="Free, hands-on DevOps training. Zero-to-Hero playlists on DevOps, AWS, Azure, Terraform, Kubernetes and more — taught through a real Go app shipped to Kubernetes.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f8fc" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="/home">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306b6d4'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='15' font-weight='bold' text-anchor='middle' fill='%23041219'%3E%26lt;/%26gt;%3C/text%3E%3C/svg%3E">
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Learn DevOps from Basics">
+  <meta property="og:description" content="Free, hands-on DevOps training. Zero-to-Hero playlists on DevOps, AWS, Azure, Terraform, Kubernetes and more — taught through a real Go app shipped to Kubernetes.">
+  <meta property="og:image" content="/static/images/golang-website.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 10px;
-        }
-
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        section {
-            margin-bottom: 20px;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>    
+  <link rel="preload" href="/static/app.css" as="style">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="home">Home</a></li>
-                <li><a href="about">About</a></li>
-                <li><a href="contact">Contact</a></li>
-                <li><a href="courses">Courses</a></li>
-            </ul>
-        </nav>
-    </header>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    <main>
-        <section>
-            <h1>Learn DevOps from Basics</h1>
-            <p>The main purpose of this website is to guide people on how to learn DevOps 
-                from basics for Free. We will provide you with the best resources to learn.
-            </p>
-        </section>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-veil" aria-hidden="true"></div>
+  <canvas id="constellation" aria-hidden="true"></canvas>
+  <div class="scroll-progress" aria-hidden="true"></div>
 
-        <section>
-            <h2>Overview</h2>
-            <p> Zero to Hero courses on all DevOps tools and popular Cloud(AWS and Azure) platform</p>
-        </section>
+  <header class="site-header">
+    <div class="shell nav-bar">
+      <a class="brand" href="/home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>go<em>&#183;</em>web<em>&#183;</em>app</span>
+      </a>
 
-        <section>
-            <h2>Courses Offered</h2>
-            <p>Please look at the <a href="courses">courses</a> section.</p>  
-        </section>
-    </main>
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="primary-nav">
+          <li><a class="nav-link" href="/home" aria-current="page">Home</a></li>
+          <li><a class="nav-link" href="/courses">Courses</a></li>
+          <li><a class="nav-link" href="/about">About</a></li>
+          <li><a class="nav-link" href="/contact">Contact</a></li>
+        </ul>
+      </nav>
 
-    <footer>
-        <p>&copy; Abhishek.Veeramalla</p>
-    </footer>
+      <div class="nav-actions">
+        <button class="palette-btn" type="button" data-palette-open hidden>
+          <span>Jump to&#8230;</span> <kbd>&#8984;K</kbd>
+        </button>
+        <button class="icon-btn" type="button" data-theme-toggle hidden
+                aria-label="Switch colour theme">&#9683;</button>
+        <button class="icon-btn nav-toggle" type="button" data-nav-toggle hidden
+                aria-expanded="false" aria-controls="primary-nav"
+                aria-label="Toggle navigation">&#8801;</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="shell">
+    <section class="hero">
+      <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>Free &#183; open source &#183; hands-on</p>
+      <h1>Learn DevOps<br><span class="gradient-text">by shipping it.</span></h1>
+      <p class="lede">
+        This site is the project. A Go binary with embedded assets, containerised
+        into a distroless image, scanned and signed in CI, then rolled out to
+        Kubernetes through Helm and Argo CD &#8212; every layer you are about to
+        learn is running right now to serve this page.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/courses">
+          Browse the courses <span class="arrow" aria-hidden="true">&#8594;</span>
+        </a>
+        <a class="btn btn-ghost" href="https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa"
+           rel="noopener noreferrer" target="_blank">
+          DevOps Zero to Hero <span class="arrow" aria-hidden="true">&#8599;</span>
+        </a>
+      </div>
+
+      <div class="terminal" data-reveal>
+        <div class="terminal-bar" aria-hidden="true">
+          <span></span><span></span><span></span><b>zsh &#8212; go-web-app</b>
+        </div>
+        <pre class="terminal-body" data-typewriter='[{"kind":"cmd","text":"git clone go-web-app \u0026\u0026 cd go-web-app"},{"kind":"out","text":"Cloning into 'go-web-app'... done."},{"kind":"cmd","text":"docker build -t go-web-app:dev ."},{"kind":"out","text":"=\u003e exporting layers  4.1MB  distroless/static"},{"kind":"cmd","text":"helm upgrade --install web ./helm/go-web-app-chart"},{"kind":"out","text":"STATUS: deployed   READY 3/3   probes green"},{"kind":"cmd","text":"echo \"you just shipped to Kubernetes\""}]'><span class="prompt">$ </span>git clone go-web-app &amp;&amp; cd go-web-app</pre>
+      </div>
+    </section>
+
+    <section aria-labelledby="numbers">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="numbers">By the numbers</span>
+        <h2>A real production path, not a toy tutorial</h2>
+      </div>
+      <dl class="stats" data-reveal>
+        <div class="stat">
+          <dt>Playlists</dt>
+          <dd><span data-count-to="9">9</span></dd>
+        </div>
+        <div class="stat">
+          <dt>Image size</dt>
+          <dd><span data-count-to="4">4</span><span class="unit">MB</span></dd>
+        </div>
+        <div class="stat">
+          <dt>Runtime deps</dt>
+          <dd><span data-count-to="0">0</span></dd>
+        </div>
+        <div class="stat">
+          <dt>Course cost</dt>
+          <dd>&#36;<span data-count-to="0">0</span></dd>
+        </div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="stack">
+      <div class="section-head" data-reveal>
+        <span class="kicker" id="stack">The stack under this page</span>
+        <h2>Every layer, end to end</h2>
+      </div>
+      <div class="grid">
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#9881;</div>
+          <h3>Go, standard library only</h3>
+          <p>
+            <code>net/http</code> with a routed <code>ServeMux</code>, structured
+            <code>log/slog</code> output, embedded assets and graceful shutdown.
+            No framework, no third-party modules.
+          </p>
+          <div class="tag-row">
+            <span class="tag">embed.FS</span><span class="tag">slog</span><span class="tag">graceful</span>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#128230;</div>
+          <h3>Containers that carry nothing</h3>
+          <p>
+            A multi-stage build produces a static binary that runs on
+            <code>distroless/static</code> as a non-root user, with a read-only
+            root filesystem and no shell to exploit.
+          </p>
+          <div class="tag-row">
+            <span class="tag">distroless</span><span class="tag">non-root</span><span class="tag">multi-arch</span>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#128737;</div>
+          <h3>A supply chain you can verify</h3>
+          <p>
+            CI lints, tests, runs <code>govulncheck</code> and Trivy, generates an
+            SBOM, then signs the image and its provenance with keyless Cosign.
+          </p>
+          <div class="tag-row">
+            <span class="tag">govulncheck</span><span class="tag">SBOM</span><span class="tag">cosign</span>
+          </div>
+        </article>
+
+        <article class="card" data-reveal>
+          <div class="card-icon" aria-hidden="true">&#9784;</div>
+          <h3>Kubernetes, declared properly</h3>
+          <p>
+            Probes, resource requests, a hardened pod security context, an HPA and
+            a disruption budget &#8212; templated in Helm and reconciled by Argo CD.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Helm</span><span class="tag">HPA</span><span class="tag">Argo CD</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="start">
+      <div class="callout" data-reveal>
+        <div>
+          <h2 id="start">Start where you are</h2>
+          <p class="lede flow-tight">
+            Nine Zero-to-Hero playlists covering DevOps, AWS, Azure, Terraform,
+            Python, Ansible, GitOps, networking and Kubernetes troubleshooting.
+            All of it free.
+          </p>
+        </div>
+        <div class="actions flush">
+          <a class="btn btn-primary" href="/courses">
+            See all courses <span class="arrow" aria-hidden="true">&#8594;</span>
+          </a>
+          <a class="btn btn-ghost" href="/about">Meet the author</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>&copy; Abhishek Veeramalla &#183; content free to use</p>
+      <p><code>go-web-app</code> &#183; Go 1.26 &#183; Kubernetes-native</p>
+      <nav aria-label="Footer">
+        <a href="/home">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/healthz">Health</a>
+        <a href="/version">Version</a>
+      </nav>
+    </div>
+  </footer>
+
+  <dialog class="palette" id="palette" aria-label="Jump to a page">
+    <input class="palette-input" type="text" placeholder="Jump to a page&#8230;"
+           aria-label="Filter pages" autocomplete="off" spellcheck="false">
+    <ul class="palette-list">
+          <li>
+            <a href="/home"><span>Home</span><span class="hint">Overview and the learning path</span></a>
+          </li>
+          <li>
+            <a href="/courses"><span>Courses</span><span class="hint">Every Zero-to-Hero playlist</span></a>
+          </li>
+          <li>
+            <a href="/about"><span>About</span><span class="hint">Who maintains this</span></a>
+          </li>
+          <li>
+            <a href="/contact"><span>Contact</span><span class="hint">Join the community</span></a>
+          </li>
+    </ul>
+    <p class="palette-empty" hidden>No matches.</p>
+    <div class="palette-foot">
+      <span>&#8593;&#8595; navigate</span><span>&#8629; open</span><span>esc close</span>
+    </div>
+  </dialog>
 </body>
 </html>
