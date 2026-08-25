@@ -1,0 +1,56 @@
+# Argo CD Application for the go-web-app.
+#
+# This is the GitOps handoff point: CI's only deployment action is to commit a
+# new image digest into the chart's values.yaml. Argo CD notices the commit and
+# reconciles the cluster to match. Nothing in CI holds cluster credentials.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: go-web-app
+  namespace: argocd
+  finalizers:
+    # Ensures deleting the Application also removes what it created, rather
+    # than orphaning the workload.
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/iam-veeramalla/go-web-app-devops.git
+    targetRevision: main
+    path: helm/go-web-app-chart
+    helm:
+      releaseName: go-web-app
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      # Remove resources deleted from Git rather than leaving them behind.
+      prune: true
+      # Revert manual kubectl edits — Git is the only source of truth.
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 10s
+        factor: 2
+        maxDuration: 3m
+
+  # The HPA owns the replica count once it is enabled, so a replica diff is
+  # expected drift rather than something for Argo CD to fight.
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+
+  revisionHistoryLimit: 10
