@@ -1,0 +1,31 @@
+# Keep the build context to just the source the image actually needs.
+.git
+.github
+.gitignore
+.golangci.yml
+.dockerignore
+Dockerfile
+Makefile
+LICENSE
+*.md
+docs/
+
+# Kubernetes / delivery manifests are not build inputs.
+helm/
+k8s/
+eks/
+gitops/
+ingress-controller/
+
+# Local artefacts
+bin/
+dist/
+coverage.out
+coverage.html
+*.test
+*.log
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/
