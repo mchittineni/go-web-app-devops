@@ -1,0 +1,60 @@
+# golangci-lint v2 configuration.
+# Run locally with: golangci-lint run
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  # Start from the default set (errcheck, govet, ineffassign, staticcheck,
+  # unused) and add the ones that catch real problems in an HTTP server.
+  enable:
+    - bodyclose        # unclosed response bodies leak connections
+    - copyloopvar
+    - durationcheck
+    - errorlint        # errors.Is/As instead of == and type assertions
+    - gocritic
+    - gosec            # security-focused static analysis
+    - misspell
+    - nilerr
+    - noctx            # requests without a context
+    - perfsprint
+    - prealloc
+    - revive
+    - rowserrcheck
+    - unconvert
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+
+  settings:
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment   # struct padding is not worth the churn here
+    gosec:
+      excludes:
+        # G114: the server is constructed with explicit timeouts in run();
+        # gosec cannot see through the http.Server literal.
+        - G114
+    revive:
+      rules:
+        - name: exported
+          disabled: true   # single-package binary, no exported API surface
+
+  exclusions:
+    rules:
+      # Test files legitimately ignore some errors and use magic numbers.
+      - path: _test\.go
+        linters:
+          - gosec
+          - errcheck
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

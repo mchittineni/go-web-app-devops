@@ -20,3 +20,40 @@
 # Go workspace file
 go.work
 go.work.sum
+
+# Editor directories and files
+.idea/
+.DS_Store
+
+# Build output
+bin/
+dist/
+/go-web-app
+
+# Coverage
+coverage.out
+coverage.html
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Security scan output
+trivy-*.sarif
+sbom*.json
+gl-*.json
+
+# Helm packaging
+*.tgz
+helm/**/charts/
+
+# MkDocs build output
+site/
+.cache/
