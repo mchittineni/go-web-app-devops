@@ -2,30 +2,25 @@
 # Every value below is consumed by a template; nothing here is decorative.
 
 replicaCount: 3
-
 image:
   repository: abhishekf5/go-web-app
   pullPolicy: IfNotPresent
   # Human-readable tag. Written by CI on each successful build.
-  tag: "10016307834"
+  tag: "latest"
   # Immutable digest ("sha256:..."). When set it takes precedence over tag,
   # so a rollout can never drift because someone re-pushed a tag.
-  digest: ""
-
+  digest: "sha256:b9eb933e38156c40849e6d46d1f89250baa866c6ada4a3040434ec5c3b0dcc0d"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
 serviceAccount:
   create: true
   # The app never calls the Kubernetes API, so it does not need a token.
   automount: false
   annotations: {}
   name: ""
-
 podAnnotations: {}
 podLabels: {}
-
 # Applies to the whole pod.
 podSecurityContext:
   runAsNonRoot: true
@@ -34,7 +29,6 @@ podSecurityContext:
   fsGroup: 65532
   seccompProfile:
     type: RuntimeDefault
-
 # Applies to the container. readOnlyRootFilesystem is safe because the HTML,
 # CSS and JS are embedded in the binary.
 securityContext:
@@ -45,14 +39,11 @@ securityContext:
   capabilities:
     drop:
       - ALL
-
 service:
   type: ClusterIP
   port: 80
   annotations: {}
-
 containerPort: 8080
-
 ingress:
   enabled: false
   className: nginx
@@ -67,7 +58,6 @@ ingress:
   #  - secretName: go-web-app-tls
   #    hosts:
   #      - go-web-app.local
-
 # CPU is requested but deliberately not limited: throttling a bursty HTTP
 # server buys nothing, whereas an unbounded memory footprint gets the node
 # evicted.
@@ -77,7 +67,6 @@ resources:
     memory: 32Mi
   limits:
     memory: 128Mi
-
 # Probe paths are served by main.go. /readyz additionally verifies the
 # embedded assets resolve, so a bad build never receives traffic.
 probes:
@@ -98,36 +87,29 @@ probes:
     periodSeconds: 5
     timeoutSeconds: 2
     failureThreshold: 2
-
 autoscaling:
   enabled: false
   minReplicas: 3
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 0
-
 podDisruptionBudget:
   enabled: true
   minAvailable: 1
-
 networkPolicy:
   enabled: false
   # Namespace the ingress controller runs in.
   ingressNamespace: ingress-nginx
   dnsNamespace: kube-system
-
 # Spread replicas across nodes without making scheduling fail if it cannot.
 topologySpreadConstraints:
   - maxSkew: 1
     topologyKey: kubernetes.io/hostname
     whenUnsatisfiable: ScheduleAnyway
-
 env:
   LOG_LEVEL: info
-
 nodeSelector: {}
 tolerations: []
 affinity: {}
-
 terminationGracePeriodSeconds: 30
 revisionHistoryLimit: 5
