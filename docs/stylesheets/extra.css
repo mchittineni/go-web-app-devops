@@ -1,0 +1,156 @@
+/* ===========================================================================
+   Zero to Kubernetes — theme overrides for MkDocs Material.
+   Palette: cool technical-manual neutrals with a slate-blue accent.
+   Only tokens are redefined per scheme, so both themes resolve as a set.
+   =========================================================================== */
+
+/* --- Light scheme -------------------------------------------------------- */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color:        #2f5aa8;
+  --md-primary-fg-color--light: #4a72bd;
+  --md-primary-fg-color--dark:  #24487f;
+  --md-accent-fg-color:         #24487f;
+
+  --md-default-bg-color:        #f6f7f9;
+  --md-default-fg-color:        #16202b;
+  --md-default-fg-color--light: #4a5b6e;
+  --md-default-fg-color--lighter: #74849a;
+
+  --md-code-bg-color:           #eceff4;
+  --md-code-fg-color:           #16202b;
+
+  --md-typeset-a-color:         #24487f;
+
+  --gwa-rule:    #dbe2ea;
+  --gwa-surface: #ffffff;
+}
+
+/* --- Dark scheme --------------------------------------------------------- */
+[data-md-color-scheme="slate"] {
+  --md-hue: 215;
+
+  --md-primary-fg-color:        #82a9ea;
+  --md-primary-fg-color--light: #a9c4f2;
+  --md-primary-fg-color--dark:  #2f5aa8;
+  --md-accent-fg-color:         #a9c4f2;
+
+  --md-default-bg-color:        #0f161e;
+  --md-default-fg-color:        #e7edf4;
+  --md-default-fg-color--light: #aebccd;
+  --md-default-fg-color--lighter: #7d8ea2;
+
+  --md-code-bg-color:           #16202b;
+  --md-code-fg-color:           #dbe4ee;
+
+  --md-typeset-a-color:         #82a9ea;
+
+  --gwa-rule:    #2a3745;
+  --gwa-surface: #16202b;
+}
+
+/* --- Typography ---------------------------------------------------------- */
+/* Archivo for headings: tighter and more technical than the body face. */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&display=swap");
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-nav__title,
+.md-header__topic {
+  font-family: "Archivo", var(--md-text-font-family), sans-serif;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.md-typeset h1 { font-weight: 700; letter-spacing: -0.035em; }
+.md-typeset h2 {
+  font-weight: 600;
+  padding-bottom: .3rem;
+  border-bottom: 2px solid var(--md-default-fg-color);
+}
+.md-typeset h3 { font-weight: 600; }
+
+/* Comfortable measure for long-form reading. */
+.md-typeset { line-height: 1.72; }
+
+/* --- Code blocks --------------------------------------------------------- */
+/* The block title carries "where do I type this", so make it prominent. */
+.md-typeset .highlight span.filename {
+  font-family: var(--md-code-font-family), monospace;
+  font-size: .68rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: var(--gwa-surface);
+  border-bottom: 1px solid var(--gwa-rule);
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset pre > code { border-radius: 0 0 .2rem .2rem; }
+
+/* --- Tables -------------------------------------------------------------- */
+.md-typeset table:not([class]) {
+  font-size: .78rem;
+  border: 1px solid var(--gwa-rule);
+}
+.md-typeset table:not([class]) th {
+  font-family: var(--md-code-font-family), monospace;
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--md-default-fg-color--lighter);
+}
+
+/* --- Admonitions --------------------------------------------------------- */
+/* "success" is used for the end-of-part Checkpoints, so give it presence. */
+.md-typeset .admonition.success,
+.md-typeset details.success {
+  border-left-width: .2rem;
+}
+.md-typeset .admonition, .md-typeset details { font-size: .75rem; }
+
+/* --- Part number badges on the nav --------------------------------------- */
+.md-nav__link { letter-spacing: -0.005em; }
+
+/* --- Landing page grid --------------------------------------------------- */
+.gwa-grid {
+  display: grid;
+  gap: .8rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  margin: 1.2rem 0;
+}
+.gwa-card {
+  display: block;
+  padding: .9rem 1rem;
+  border: 1px solid var(--gwa-rule);
+  border-radius: .3rem;
+  background: var(--gwa-surface);
+  color: inherit !important;
+  text-decoration: none !important;
+  transition: border-color .12s, transform .12s;
+}
+.gwa-card:hover {
+  border-color: var(--md-primary-fg-color);
+  transform: translateY(-2px);
+}
+.gwa-card .n {
+  display: block;
+  font-family: var(--md-code-font-family), monospace;
+  font-size: .62rem;
+  letter-spacing: .1em;
+  color: var(--md-primary-fg-color);
+  margin-bottom: .2rem;
+}
+.gwa-card strong { display: block; font-size: .82rem; }
+.gwa-card span.d {
+  display: block;
+  font-size: .72rem;
+  color: var(--md-default-fg-color--light);
+  margin-top: .15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gwa-card:hover { transform: none; }
+}

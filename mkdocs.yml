@@ -1,0 +1,121 @@
+site_name: Zero to Kubernetes
+site_description: >-
+  A complete beginner's walkthrough of the go-web-app-devops project — from
+  installing Go to a self-healing GitOps deployment.
+site_author: Abhishek Veeramalla
+site_url: https://mchittineni.github.io/go-web-app-devops/
+
+repo_url: https://github.com/mchittineni/go-web-app-devops
+repo_name: mchittineni/go-web-app-devops
+edit_uri: edit/main/docs/
+
+copyright: >-
+  Original project and course content by Abhishek Veeramalla.
+  Licensed under Apache-2.0.
+
+theme:
+  name: material
+  language: en
+  icon:
+    repo: fontawesome/brands/github
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  palette:
+    # Follow the reader's OS setting by default, with a manual override.
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Follow system theme
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    # Every command block gets a copy button.
+    - content.code.copy
+    - content.action.edit
+    - content.tooltips
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      permalink_title: Link to this section
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - search
+  # Shows "Last updated" from git history. Requires fetch-depth: 0 in CI.
+  - git-revision-date-localized:
+      enable_creation_date: false
+      fallback_to_build_date: true
+
+nav:
+  - Start here: index.md
+  - 01 · Install your tools: 01-install-your-tools.md
+  - 02 · Run the website: 02-run-the-website.md
+  - 03 · Read the code: 03-read-the-code.md
+  - 04 · Build a container: 04-build-a-container.md
+  - 05 · Your first cluster: 05-your-first-cluster.md
+  - 06 · Package with Helm: 06-package-with-helm.md
+  - 07 · Automate with CI/CD: 07-automate-with-cicd.md
+  - 08 · Deploy to the cloud: 08-deploy-to-the-cloud.md
+  - 09 · GitOps with Argo CD: 09-gitops-with-argocd.md
+  - 10 · When it breaks: 10-when-it-breaks.md
+  - Glossary: glossary.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mchittineni/go-web-app-devops
+      name: The project on GitHub
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/playlist?list=PLdpzxOOAlwvIKMhk8WhzN1pYoJ1YU8Csa
+      name: The free DevOps course
