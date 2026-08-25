@@ -1,7 +1,37 @@
-# prerequisites
+# Prerequisites
 
-kubectl – A command line tool for working with Kubernetes clusters. For more information, see [Installing or updating kubectl]("https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html").
+Install these before creating a cluster. Pin versions in CI rather than
+relying on whatever is on the machine.
 
-eksctl – A command line tool for working with EKS clusters that automates many individual tasks. For more information, see [Installing or updating]("https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html").
+| Tool | Purpose | Docs |
+|---|---|---|
+| `kubectl` | Talk to the cluster. Keep it within one minor version of the control plane. | [Install kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) |
+| `eksctl` | Create and manage EKS clusters declaratively. | [Install eksctl](https://eksctl.io/installation/) |
+| `aws` CLI v2 | Authenticate and manage AWS resources. | [Install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) |
+| `helm` | Install this app's chart. | [Install Helm](https://helm.sh/docs/intro/install/) |
 
-AWS CLI – A command line tool for working with AWS services, including Amazon EKS. For more information, see [Installing, updating, and uninstalling the AWS CLI]("https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html") in the AWS Command Line Interface User Guide. After installing the AWS CLI, we recommend that you also configure it. For more information, see [Quick configuration]("https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config") with aws configure in the AWS Command Line Interface User Guide.
+## Configure AWS credentials
+
+Prefer short-lived credentials over long-lived access keys:
+
+```bash
+# IAM Identity Center (formerly AWS SSO) — recommended
+aws configure sso
+aws sso login --profile my-profile
+
+# Verify which identity you are actually using before creating anything
+aws sts get-caller-identity
+```
+
+Long-lived `aws configure` access keys still work, but they are the most
+commonly leaked AWS credential. If you must use them, scope them tightly and
+rotate them on a schedule.
+
+## Verify the toolchain
+
+```bash
+kubectl version --client
+eksctl version
+aws --version
+helm version --short
+```
